@@ -13,6 +13,7 @@ import NoMarginChartMixin from '../mixins/no-margin-chart';
 import AxisTitlesMixin from '../mixins/axis-titles';
 
 import { groupBy } from '../utils/group-by';
+import { createBr, createSpan } from '../utils';
 
 const TimeSeriesChartComponent = ChartComponent.extend(LegendMixin,
   TimeSeriesLabelerMixin, FloatingTooltipMixin, HasTimeSeriesRuleMixin,
@@ -596,17 +597,17 @@ const TimeSeriesChartComponent = ChartComponent.extend(LegendMixin,
 
       var time = data.labelTime != null ? data.labelTime : data.time;
       time = this.adjustTimeForShowDetails(time);
-      var content = $('<span>');
-      content.append($("<span class=\"tip-label\">").text(this.get('formatTime')(time)));
-      this.showTooltip(content.html(), d3.event);
+      var content = createSpan();
+      content.appendChild(createSpan(this.get('formatTime')(time), ['tip-label']));
+      this.showTooltip(content.outerHTML, d3.event);
       var formatLabelFunction = this.get('formatLabelFunction');
 
       var addValueLine = function(d) {
-        var name = $('<span class="name" />').text(d.group + ': ');
-        var value = $('<span class="value" />').text(formatLabelFunction(d.value));
+        var name = createSpan(d.group + ': ', ['name']);
+        var value = createSpan(formatLabelFunction(d.value), ['value']);
         content.append(name);
         content.append(value);
-        content.append('<br />');
+        content.append(createBr());
       };
 
       if (Ember.isArray(data.values)) {
@@ -615,7 +616,7 @@ const TimeSeriesChartComponent = ChartComponent.extend(LegendMixin,
         addValueLine(data);
       }
 
-      return this.showTooltip(content.html(), d3.event);
+      return this.showTooltip(content.outerHTML, d3.event);
     };
   }),
 
@@ -701,7 +702,7 @@ const TimeSeriesChartComponent = ChartComponent.extend(LegendMixin,
   // 4th line: ~1px, 66% tinted, dotted
   // 5th line: ~3px, 33% tinted, solid
   // 6th line: ~3px, 33% tinted, dotted
-  lineColorFn: Ember.computed(function() {
+  get lineColorFn() {
     return (d, i) => {
       var ii;
       switch (i) {
@@ -728,7 +729,7 @@ const TimeSeriesChartComponent = ChartComponent.extend(LegendMixin,
       }
       return this.get('getSeriesColor')(d, ii);
     };
-  }),
+  },
 
   lineAttrs: Ember.computed('line', 'getSeriesColor', function() {
     return {
@@ -849,19 +850,19 @@ const TimeSeriesChartComponent = ChartComponent.extend(LegendMixin,
     return this.get('viewport').selectAll('.bars');
   },
 
-  groups: Ember.computed(function() {
+  get groups() {
     return this.getViewportBars().data(this.get('_groupedBarData'));
-  }).volatile(),
+  },
 
   removeAllSeries: function() {
     this.get('viewport').selectAll('.series').remove();
   },
 
-  series: Ember.computed(function() {
+  get series() {
     return this.get('viewport').selectAll('.series').data(this.get('_groupedLineData'));
-  }).volatile(),
+  },
 
-  xAxis: Ember.computed(function() {
+  get xAxis() {
     var xAxis = this.get('viewport').select('.x.axis');
     if (xAxis.empty()) {
       return this.get('viewport')
@@ -870,9 +871,9 @@ const TimeSeriesChartComponent = ChartComponent.extend(LegendMixin,
     } else {
       return xAxis;
     }
-  }).volatile(),
+  },
 
-  yAxis: Ember.computed(function() {
+  get yAxis() {
     var yAxis = this.get('viewport').select('.y.axis');
     if (yAxis.empty()) {
       return this.get('viewport')
@@ -881,7 +882,7 @@ const TimeSeriesChartComponent = ChartComponent.extend(LegendMixin,
     } else {
       return yAxis;
     }
-  }).volatile(),
+  },
 
   // ----------------------------------------------------------------------------
   // Drawing Functions

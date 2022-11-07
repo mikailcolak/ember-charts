@@ -9,8 +9,7 @@ export default Ember.Component.extend({
   max: 10,
   step: 1,
   change: function() {
-    var value = this.$()[0].value;
-    this.set('value', +value);
+    this.set('value', +this.element.value);
   }
 
 });

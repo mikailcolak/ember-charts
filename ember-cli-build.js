@@ -6,9 +6,6 @@ module.exports = function (defaults) {
   let app = new EmberAddon(defaults, {
     // Add options here
   });
-  app.import(app.bowerDirectory + '/bootstrap/dist/css/bootstrap.min.css');
-  app.import(app.bowerDirectory + '/jquery-ui/themes/base/jquery-ui.css');
-  app.import(app.bowerDirectory + '/tinycolor/tinycolor.js');
 
   /*
     This build file specifies the options for the dummy test app of this

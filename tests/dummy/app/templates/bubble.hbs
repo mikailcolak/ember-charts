@@ -5,10 +5,7 @@
 
   <div class="example-container">
     <div class="chart-container">
-      {{bubble-chart
-        data=data
-        selectedSeedColor=selectedSeedColor
-      }}
+      <BubbleChart @data={{this.data}} @selectedSeedColor={{this.selectedSeedColor}} />
     </div>
   </div>
 
@@ -17,19 +14,19 @@
       <ol>
         <li>
           <label>Data</label>
-          {{view "select"
-           content=availableDataSets
-           value=selectedData
-           class="form-control"
-          }}
+          <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedData)))}}>
+           {{#each this.availableDataSets as |dataset|}}
+           <option value={{dataset}} selected={{eq dataset this.selectedData}}>{{dataset}}</option>
+           {{/each}}
+          </select>
         </li>
         <li>
           <label>Color</label>
-          {{view "select"
-           content=seedColorNames
-           value=selectedSeedColorName
-           class="form-control"
-          }}
+          <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedSeedColorName)))}}>
+           {{#each this.seedColorNames as |dataset|}}
+           <option value={{dataset}} selected={{eq dataset this.selectedSeedColorName}}>{{dataset}}</option>
+           {{/each}}
+          </select>
         </li>
       </ol>
     </div>
@@ -37,7 +34,7 @@
 
   <div class="chart-json">
     <pre>
-      {{prettyPrintedData}}
+      {{this.prettyPrintedData}}
     </pre>
   </div>
 </div>

@@ -74,25 +74,25 @@ const PieLegendMixin = Ember.Mixin.create({
     };
   }),
 
-  legendLabelAttrs: Ember.computed(function() {
+  get legendLabelAttrs() {
     return {
       style: "text-anchor:middle;",
       y: '-.35em'
     };
-  }),
+  },
 
   // ----------------------------------------------------------------------------
   // Selections
   // ----------------------------------------------------------------------------
 
-  legend: Ember.computed(function() {
+  get legend() {
     var legend = this.get('viewport').select('.legend');
     if (legend.empty()) {
       return this.get('viewport').append('g').attr('class', 'legend');
     } else {
       return legend;
     }
-  }).volatile(),
+  },
 
   // ----------------------------------------------------------------------------
   // Drawing Functions

@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import * as d3 from 'd3';
-import { map } from 'lodash-es';
 import ChartComponent from './chart-component';
 import FormattableMixin from '../mixins/formattable';
 
@@ -9,6 +8,7 @@ import SortableChartMixin from '../mixins/sortable-chart';
 
 import LabelTrimmer from '../utils/label-trimmer';
 import AxisTitlesMixin from '../mixins/axis-titles';
+import { createSpan } from '../utils';
 
 
 const HorizontalBarChartComponent = ChartComponent.extend(FloatingTooltipMixin,
@@ -195,13 +195,12 @@ const HorizontalBarChartComponent = ChartComponent.extend(FloatingTooltipMixin,
       // Do hover detail style stuff here
       d3.select(element).classed('hovered', true);
 
-      // Show tooltip
       var formatLabel = this.get('formatLabelFunction');
-      var content = $('<span>');
-      content.append($('<span class="tip-label">').text(data.label));
-      content.append($('<span class="name">').text(this.get('tooltipValueDisplayName') + ': '));
-      content.append($('<span class="value">').text(formatLabel(data.value)));
-      return this.showTooltip(content.html(), d3.event);
+      var content = createSpan();
+      content.appendChild(createSpan(data.label, ['tip-label']));
+      content.appendChild(createSpan(this.get('tooltipValueDisplayName') + ': ', ['name']));
+      content.appendChild(createSpan(formatLabel(data.value), ['value']));
+      return this.showTooltip(content.outerHTML, d3.event);
 
     };
   }),
@@ -324,16 +323,16 @@ const HorizontalBarChartComponent = ChartComponent.extend(FloatingTooltipMixin,
   // ----------------------------------------------------------------------------
   // Selections
   // ----------------------------------------------------------------------------
- 
+
   getViewportBars() {
     return this.get('viewport').selectAll('.bar');
   },
 
-  groups: Ember.computed(function() {
+  get groups() {
     return this.getViewportBars().data(this.get('finishedData'));
-  }).volatile(),
+  },
 
-  yAxis: Ember.computed(function() {
+  get yAxis() {
     var yAxis = this.get('viewport').select('.y.axis line');
     if (yAxis.empty()) {
       return this.get('viewport')
@@ -343,7 +342,7 @@ const HorizontalBarChartComponent = ChartComponent.extend(FloatingTooltipMixin,
     } else {
       return yAxis;
     }
-  }).volatile(),
+  },
 
   // ----------------------------------------------------------------------------
   // Drawing Functions
@@ -608,7 +607,7 @@ const HorizontalBarChartComponent = ChartComponent.extend(FloatingTooltipMixin,
    * @return {Number}
    */
   _maxWidthOfElements: function(elements) {
-    return d3.max(map(elements, (element) => {
+    return d3.max(elements.map(element => {
       return element.getComputedTextLength();
     }));
   },

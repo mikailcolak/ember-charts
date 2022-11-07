@@ -1,7 +1,7 @@
 {{!-- Main navigation --}}
-{{partial "navigation"}}
+<Navigation />
 
-{{#if showLargeHero}}
+{{#if this.showLargeHero}}
   {{!-- Hero --}}
   <div class="hero-container">
     <div class="hero charts-hero">
@@ -36,10 +36,10 @@
 {{!-- Main Container --}}
 <div class="container">
   <div class="row">
-    {{partial "sub_navigation"}}
+    <SubNavigation />
     {{outlet}}
   </div>
 </div>
 
 {{!-- Footer --}}
-{{partial "footer"}}
+<Footer />

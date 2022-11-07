@@ -9,6 +9,7 @@ import FormattableMixin from '../mixins/formattable';
 import NoMarginChartMixin from '../mixins/no-margin-chart';
 import AxisTitlesMixin from '../mixins/axis-titles';
 import LabelTrimmer from '../utils/label-trimmer';
+import { createBr, createSpan } from '../utils';
 
 /**
  * Base class for stacked vertical bar chart components.
@@ -387,11 +388,11 @@ const StackedVerticalBarChartComponent = ChartComponent.extend(LegendMixin,
    * @see sliceSortKey
    * @type {function}
    */
-  customSliceSortingFn: Ember.computed(function() {
+  get customSliceSortingFn() {
     return (slice1, slice2) => {
       return this.defaultCompareFn(slice1.sliceLabel, slice2.sliceLabel);
     };
-  }),
+  },
 
   /**
    * Comparison function for slices when sliceSortKey is 'none'
@@ -449,11 +450,11 @@ const StackedVerticalBarChartComponent = ChartComponent.extend(LegendMixin,
    * @see barSortKey
    * @type {function}
    */
-  valueBarSortingFn: Ember.computed(function() {
+  get valueBarSortingFn() {
     return (barData1, barData2) => {
       return this.defaultCompareFn(barData1.value, barData2.value);
     };
-  }),
+  },
 
   /**
    * The original order that bar labels are listed from the input data.
@@ -479,11 +480,11 @@ const StackedVerticalBarChartComponent = ChartComponent.extend(LegendMixin,
    * @see barSortKey
    * @type {function}
    */
-  customBarSortingFn: Ember.computed(function() {
+  get customBarSortingFn() {
     return (barData1, barData2) => {
       return this.defaultCompareFn(barData1.barLabel, barData2.barLabel);
     };
-  }),
+  },
 
   /**
    * Comparison function for bar data when barSortKey is 'none'
@@ -767,18 +768,16 @@ const StackedVerticalBarChartComponent = ChartComponent.extend(LegendMixin,
       d3.select(element).classed('hovered', true);
 
       // Show tooltip
-      var content = $('<span />');
+      var content = createSpan();
       if (data.barLabel) {
-        content.append($('<span class="tip-label" />').text(data.barLabel));
+        content.appendChild(createSpan(data.barLabel, ['tip-label']));
       }
 
       var formatLabel = this.get('formatLabelFunction');
       var addValueLine = function(d) {
-        var label = $('<span class="name" />').text(d.sliceLabel + ": ");
-        content.append(label);
-        var value = $('<span class="value" />').text(formatLabel(d.value));
-        content.append(value);
-        content.append('<br />');
+        content.appendChild(createSpan(`${d.sliceLabel}: `, ['name']));
+        content.appendChild(createSpan(formatLabel(d.value), ['value']));
+        content.appendChild(createBr());
       };
 
       if (isGroup) {
@@ -788,7 +787,7 @@ const StackedVerticalBarChartComponent = ChartComponent.extend(LegendMixin,
         // Just hovering over single bar
         addValueLine(data);
       }
-      return this.showTooltip(content.html(), d3.event);
+      return this.showTooltip(content.outerHTML, d3.event);
     };
   }),
 
@@ -875,11 +874,11 @@ const StackedVerticalBarChartComponent = ChartComponent.extend(LegendMixin,
     return this.get('viewport').selectAll('.bars');
   },
 
-  bars: Ember.computed(function() {
+  get bars () {
     return this.getViewportBars().data(this.get('finishedData'));
-  }).volatile(),
+  },
 
-  yAxis: Ember.computed(function() {
+  get yAxis() {
     var yAxis = this.get('viewport').select('.y.axis');
     if (yAxis.empty()) {
       return this.get('viewport')
@@ -888,7 +887,7 @@ const StackedVerticalBarChartComponent = ChartComponent.extend(LegendMixin,
     } else {
       return yAxis;
     }
-  }).volatile(),
+  },
 
   // ---------------------------------------------------------------------------
   // Label Layout

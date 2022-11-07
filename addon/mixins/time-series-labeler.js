@@ -204,11 +204,11 @@ export default Ember.Mixin.create({
    *
    * @type {function}
    */
-  tickFilter: Ember.computed(function() {
+  get tickFilter() {
     return function() {
       return true;
     };
-  }),
+  },
 
   //  This is the set of ticks on which labels appear.
   labelledTicks: Ember.computed('unfilteredLabelledTicks', 'tickFilter', function() {

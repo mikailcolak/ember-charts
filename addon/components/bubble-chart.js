@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import ChartComponent from './chart-component';
 
 import FloatingTooltipMixin from '../mixins/floating-tooltip';
+import { createSpan } from '../utils';
 
 export default ChartComponent.extend(FloatingTooltipMixin, {
   classNames: ['chart-bubble'],
@@ -26,9 +27,9 @@ export default ChartComponent.extend(FloatingTooltipMixin, {
   // repel.
   // Dividing by 8 scales down the charge to be
   // appropriate for the visualization dimensions.
-  charge: Ember.computed(function() {
+  get charge() {
     return (d) => -Math.pow(d.radius, 2.0) / 8;
-  }),
+  },
 
   // Getters for formatting human-readable labels from provided data
   formatLabel: d3.format(',.2f'),
@@ -48,11 +49,11 @@ export default ChartComponent.extend(FloatingTooltipMixin, {
 
       // Show tooltip
       var formatLabel = this.get('formatLabel');
-      var content = $('<span>');
-      content.append($('<span class="tip-label">').text(data.label));
-      content.append($('<span class="name">').text(this.get('tooltipValueDisplayName') + ': '));
-      content.append($('<span class="value">').text(formatLabel(data.value)));
-      return this.showTooltip(content.html(), d3.event);
+      var content = createSpan();
+      content.appendChild(createSpan(data.label, ['tip-label']));
+      content.appendChild(createSpan(this.get('tooltipValueDisplayName') + ': ', ['name']));
+      content.appendChild(createSpan(formatLabel(data.value), ['value']));
+      return this.showTooltip(content.outerHTML, d3.event);
     };
   }),
 

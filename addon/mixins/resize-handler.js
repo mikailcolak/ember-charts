@@ -9,7 +9,7 @@ export default Ember.Mixin.create({
   onResizeEnd() {},
   onResize() {},
 
-  endResize: Ember.computed(function() {
+  get endResize() {
     return function(event) {
       if (this.isDestroyed) {
         return;
@@ -19,7 +19,7 @@ export default Ember.Mixin.create({
         this.onResizeEnd(event);
       }
     };
-  }),
+  },
 
   handleWindowResize: function(event) {
     if ((typeof event.target.id !== "undefined" && event.target.id !== null) &&
@@ -48,16 +48,17 @@ export default Ember.Mixin.create({
     return this._super();
   },
 
-  _setupDocumentHandlers: function() {
+
+  _setupDocumentHandlers: function () {
     if (this._resizeHandler) {
       return;
     }
-    this._resizeHandler = Ember.$.proxy(this.get('handleWindowResize'), this);
-    return Ember.$(window).on("resize." + this.elementId, this._resizeHandler);
+    this._resizeHandler = this.get('handleWindowResize').bind(this);
+    window.addEventListener('resize', this._resizeHandler);
   },
 
-  _removeDocumentHandlers: function() {
-    Ember.$(window).off("resize." + this.elementId, this._resizeHandler);
+  _removeDocumentHandlers: function () {
+    window.removeEventListener('resize', this._resizeHandler);
     return this._resizeHandler = null;
   }
 });

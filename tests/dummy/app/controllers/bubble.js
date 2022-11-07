@@ -15,7 +15,7 @@ export default SlideController.extend({
 
   availableDataSets: Ember.computed('rawDataHash', function() {
     return Ember.A(keys(this.get('rawDataHash')));
-  }), 
+  }),
 
   data: Ember.computed('selectedData', 'rawDataHash', function() {
     return this.get('rawDataHash')[ this.get('selectedData')];

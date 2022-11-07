@@ -2,22 +2,22 @@ import { module, test } from 'qunit';
 import Ember from 'ember';
 import AxisTitlesMixin from 'dummy/mixins/axis-titles';
 
-module('Unit | Mixin | axis titles', function() {
+module('Unit | Mixin | axis titles', function () {
 
   // Replace this with your real tests.
-  test('it works', function(assert) {
+  test('it works', function (assert) {
     const AxisTitlesObject = Ember.Object.extend(AxisTitlesMixin);
     const subject = AxisTitlesObject.create();
     assert.ok(subject);
   });
 
-  test('No left margin', function(assert) {
+  test('No left margin', function (assert) {
     const AxisTitlesObject = Ember.Object.extend(AxisTitlesMixin);
     const subject = AxisTitlesObject.create();
     assert.equal(subject.get('marginLeft'), 0);
   });
 
-  test('Has left margin', function(assert) {
+  test('Has left margin', function (assert) {
     const AxisTitlesObject = Ember.Object.extend(AxisTitlesMixin);
     const subject = AxisTitlesObject.create({
       hasXAxisTitle: true,
@@ -26,7 +26,7 @@ module('Unit | Mixin | axis titles', function() {
     assert.equal(subject.get('marginLeft'), 20);
   });
 
-  test('Has x title horizontal offset', function(assert) {
+  test('Has x title horizontal offset', function (assert) {
     const AxisTitlesObject = Ember.Object.extend(AxisTitlesMixin);
     const subject1 = AxisTitlesObject.create({
       xTitleHorizontalOffset: 0,
@@ -43,7 +43,7 @@ module('Unit | Mixin | axis titles', function() {
     assert.equal(subject2.get('xAxisPositionX'), 40);
   });
 
-  test('Has y title vertical offset', function(assert) {
+  test('Has y title vertical offset', function (assert) {
     const AxisTitlesObject = Ember.Object.extend(AxisTitlesMixin);
     const subject1 = AxisTitlesObject.create({
       yTitleVerticalOffset: 0,
@@ -60,7 +60,7 @@ module('Unit | Mixin | axis titles', function() {
     assert.equal(subject2.get('yAxisPositionX'), -80);
   });
 
-  test('x & y toggle flags', function(assert) {
+  test('x & y toggle flags', function (assert) {
     const AxisTitlesObject = Ember.Object.extend(AxisTitlesMixin);
     const subject1 = AxisTitlesObject.create({
       xValueDisplayName: "X Title",
@@ -80,7 +80,7 @@ module('Unit | Mixin | axis titles', function() {
     assert.equal(subject1.get('hasAxisTitles'), true);
   });
 
-  test('legend chart padding', function(assert) {
+  test('legend chart padding', function (assert) {
     const AxisTitlesObject = Ember.Object.extend(AxisTitlesMixin);
     const subject1 = AxisTitlesObject.create({
       xAxisTitleHeightOffset: 10,
@@ -89,7 +89,7 @@ module('Unit | Mixin | axis titles', function() {
     assert.equal(subject1.get('legendChartPadding'), 23);
   });
 
-  test('support hasAxisTitles', function(assert) {
+  test('support hasAxisTitles', function (assert) {
     const AxisTitlesObject = Ember.Object.extend(AxisTitlesMixin);
     const subject1 = AxisTitlesObject.create({
       hasAxisTitles: true

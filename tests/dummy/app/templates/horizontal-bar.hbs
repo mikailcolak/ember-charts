@@ -5,20 +5,20 @@
 
   <div class="example-container">
     <div class="chart-container">
-      {{horizontal-bar-chart
-        minBarThickness=minBarThickness
-        maxBarThickness=maxBarThickness
-        selectedSeedColor=selectedSeedColor
-        data=data
-        hasXAxisTitle=hasXAxisTitle
-        hasYAxisTitle=hasYAxisTitle
-        xTitleHorizontalOffset=xTitleHorizontalOffset
-        xTitleVerticalOffset=xTitleVerticalOffset
-        yTitleVerticalOffset=yTitleVerticalOffset
-        xValueDisplayName=xValueDisplayName
-        yValueDisplayName=yValueDisplayName
-        maxLabelWidth=maxLabelWidth
-      }}
+      <HorizontalBarChart
+        @minBarThickness={{this.minBarThickness}}
+        @maxBarThickness={{this.maxBarThickness}}
+        @selectedSeedColor={{this.selectedSeedColor}}
+        @data={{this.data}}
+        @hasXAxisTitle={{this.hasXAxisTitle}}
+        @hasYAxisTitle={{this.hasYAxisTitle}}
+        @xTitleHorizontalOffset={{this.xTitleHorizontalOffset}}
+        @xTitleVerticalOffset={{this.xTitleVerticalOffset}}
+        @yTitleVerticalOffset={{this.yTitleVerticalOffset}}
+        @xValueDisplayName={{this.xValueDisplayName}}
+        @yValueDisplayName={{this.yValueDisplayName}}
+        @maxLabelWidth={{this.maxLabelWidth}}
+      />
     </div>
   </div>
 
@@ -30,70 +30,85 @@
         <div class="form-group">
           <label class="col-lg-4 control-label">Data</label>
           <div class="col-lg-8" data-test="data">
-            {{view "select"
-              content=availableDataSets
-              value=selectedData
-              class="form-control"
-            }}
+            <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedData)))}}>
+              {{#each this.availableDataSets as |dataset|}}
+              <option value={{dataset}} selected={{eq dataset this.selectedData}}>{{dataset}}</option>
+              {{/each}}
+            </select>
           </div>
         </div>
         {{!-- (Artych) I don't find selectedSortType property in components
         <div class="form-group">
           <label class="col-lg-4 control-label">Sorting</label>
           <div class="col-lg-8">
-            {{view "select"
-              content=sortTypes
-              value=selectedSortType
-              class="form-control"
-            }}
+            <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedSortType)))}}>
+              {{#each this.sortTypes as |dataset|}}
+              <option value={{dataset}} selected={{eq dataset this.selectedSortType}}>{{dataset}}</option>
+              {{/each}}
+            </select>
           </div>
         </div> --}}
         <div class="form-group">
           <label class="col-lg-4 control-label">Color</label>
           <div class="col-lg-8">
-            {{view "select"
-              content=seedColorNames
-              value=selectedSeedColorName
-              class="form-control"
-            }}
+            <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedSeedColorName)))}}>
+              {{#each this.seedColorNames as |dataset|}}
+              <option value={{dataset}} selected={{eq dataset this.selectedSeedColorName}}>{{dataset}}</option>
+              {{/each}}
+            </select>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Min Bar Thickness</label>
           <div class="col-lg-8">
-             {{scrubber-component min=20 max=200 step=10 value=minBarThickness}}
-            <span class="help-block">Min Thickness: {{minBarThickness}}</span>
+             <ScrubberComponent
+              @min={{20}}
+              @max={{200}}
+              @step={{10}}
+              @value={{this.minBarThickness}}
+            />
+            <span class="help-block">Min Thickness: {{this.minBarThickness}}</span>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Max Bar Thickness</label>
           <div class="col-lg-8">
-            {{scrubber-component min=20 max=200 step=10 value=maxBarThickness}}
-            <span class="help-block">Max Thickness: {{maxBarThickness}}</span>
+            <ScrubberComponent
+              @min={{20}}
+              @max={{200}}
+              @step={{10}}
+              @value={{this.maxBarThickness}}
+            />
+            <span class="help-block">Max Thickness: {{this.maxBarThickness}}</span>
           </div>
         </div>
-        {{partial "axis-title-config"}}
+        <AxisTitleConfig
+          @hasXAxisTitle={{this.hasXAxisTitle}}
+          @hasYAxisTitle={{this.hasYAxisTitle}}
+          @xValueDisplayName={{this.xValueDisplayName}}
+          @xTitleHorizontalOffset={{this.xTitleHorizontalOffset}}
+          @yValueDisplayName={{this.yValueDisplayName}}
+          @yTitleVerticalOffset={{this.yTitleVerticalOffset}}
+        />
+
 
         <div class="form-group">
           <div class="col-lg-offset-4 col-lg-8">
             <div class="checkbox">
               <label>
-                {{input
-                  type="checkbox"
-                  checked=hasMaxLabelWidth
-                }}
+                <Input @type="checkbox" @checked={{this.hasMaxLabelWidth}} />
                 Has max label width
               </label>
             </div>
           </div>
         </div>
 
-        {{#if hasMaxLabelWidth}}
+        {{#if this.hasMaxLabelWidth}}
           <div class="form-group">
             <label class="col-lg-4 control-label">Max Label Width</label>
             <div class="col-lg-8">
-              {{scrubber-component min=0 max=300 step=25 value=configuredMaxLabelWidth}}
-              <span class="help-block">Max label width: {{maxLabelWidth}}</span>
+              <ScrubberComponent @min={{0}} @max={{300}} @step={{25}} @value={{this.configuredMaxLabelWidth}} />
+              <span class="help-block">Max label width: {{this.maxLabelWidth}}</span>
             </div>
           </div>
         {{/if}}
@@ -104,7 +119,7 @@
     <div class="col-md-6">
       <h4>JSON Data</h4>
       <div class="chart-json">
-        <pre>{{prettyPrintedData}}</pre>
+        <pre>{{this.prettyPrintedData}}</pre>
       </div>
     </div>
   </div>

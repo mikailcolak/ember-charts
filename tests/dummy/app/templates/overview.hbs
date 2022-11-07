@@ -12,42 +12,42 @@
   </div>
 
   <div class="row ember-charts-examples">
-    {{#link-to 'time-series'}}
+    <LinkTo @route="time-series">
       <div class="col-md-4">
         <h4>Time Series</h4>
-        <img class="preview-box" src="img/preview_chart_time_series.png" />
+        <img class="preview-box" src="img/preview_chart_time_series.png" alt="Time Series" />
       </div>
-    {{/link-to}}
-    {{#link-to 'horizontal-bar'}}
+    </LinkTo>
+    <LinkTo @route="horizontal-bar">
       <div class="col-md-4">
         <h4>Horizontal Bar</h4>
-        <img class="preview-box" src="img/preview_chart_horizontal_bar.png" />
+        <img class="preview-box" src="img/preview_chart_horizontal_bar.png" alt="Horizontal Bar" />
       </div>
-    {{/link-to}}
-    {{#link-to 'vertical-bar'}}
+    </LinkTo>
+    <LinkTo @route="vertical-bar">
       <div class="col-md-4">
         <h4>Vertical Bar</h4>
-        <img class="preview-box" src="img/preview_chart_vertical_bar.png" />
+        <img class="preview-box" src="img/preview_chart_vertical_bar.png" alt="Vertical Bar" />
       </div>
-    {{/link-to}}
-    {{#link-to 'stacked-vertical-bar'}}
+    </LinkTo>
+    <LinkTo @route="stacked-vertical-bar">
       <div class="col-md-4">
         <h4>Stacked Bar</h4>
-        <img class="preview-box" src="img/preview_chart_stacked_vertical_bar.png" />
+        <img class="preview-box" src="img/preview_chart_stacked_vertical_bar.png" alt="Stacked Vertical Bar" />
       </div>
-    {{/link-to}}
-    {{#link-to 'pie'}}
+    </LinkTo>
+    <LinkTo @route="pie">
       <div class="col-md-4">
         <h4>Pie</h4>
-        <img class="preview-box" src="img/preview_chart_pie.png" />
+        <img class="preview-box" src="img/preview_chart_pie.png" alt="Pie" />
       </div>
-    {{/link-to}}
-    {{#link-to 'scatter'}}
+    </LinkTo>
+    <LinkTo @route="scatter">
       <div class="col-md-4">
         <h4>Scatter</h4>
-        <img class="preview-box" src="img/preview_chart_scatter.png" />
+        <img class="preview-box" src="img/preview_chart_scatter.png" alt="Scatter"/>
       </div>
-    {{/link-to}}
+    </LinkTo>
   </div>
 
   <hr>
@@ -58,7 +58,7 @@
         <li>Highly customizable and extensible.</li>
         <li>Rich with features - add legends, labels, tooltips, and
         mouseover effects.</li>
-        <li>Robust & polished - weird data will not cause your charts to
+        <li>Robust &amp; polished - weird data will not cause your charts to
         break.</li>
         <li>Roll your own charts by extending our ChartComponent class -
         get labels, automatic resizing, and reasonable defaults for
@@ -68,11 +68,9 @@
     <div class="col-md-6">
       <h3>Dependencies</h3>
       <ul class="styled">
-        <li><a href="https://d3js.org/">D3.js</a></li>
-        <li><a href="https://emberjs.com/">Ember.js</a></li>
+        <li><a href="https://d3js.org/">D3.js (v3)</a></li>
+        <li><a href="https://emberjs.com/">Ember.js (v3)</a></li>
         <li><a href="https://lodash.com/">Lo-Dash.js</a></li>
-        <li><a href="https://jquery.com/">jQuery</a></li>
-        <li><a href="https://jqueryui.com/">jQuery UI</a></li>
       </ul>
     </div>
   </div>

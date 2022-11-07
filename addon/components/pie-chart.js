@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import * as d3 from 'd3';
-import { cloneDeep, drop, each, find, indexOf, last, max, min, sortBy, take, takeRight } from 'lodash-es';
+import { cloneDeep, each, find, indexOf, last, max, min, sortBy, takeRight } from 'lodash-es';
 import ChartComponent from './chart-component';
 import FormattableMixin from '../mixins/formattable';
 import FloatingTooltipMixin from '../mixins/floating-tooltip';
@@ -9,6 +9,7 @@ import PieLegendMixin from '../mixins/pie-legend';
 import LabelWidthMixin from '../mixins/label-width';
 
 import LabelTrimmer from '../utils/label-trimmer';
+import { createSpan } from '../utils';
 
 const PieChartComponent = ChartComponent.extend(FloatingTooltipMixin,
   FormattableMixin, SortableChartMixin, PieLegendMixin, LabelWidthMixin, {
@@ -161,16 +162,16 @@ const PieChartComponent = ChartComponent.extend(FloatingTooltipMixin,
     // Next, continue putting slices in other slice if there are too many
     // take instead of first see https://lodash.com/docs#take
     // drop instead of rest
-    slicesLeft = take(data, lowPercentIndex);
+    slicesLeft = data.slice(0, lowPercentIndex);
 
-    overflowSlices = drop(slicesLeft, maxNumberOfSlices);
+    overflowSlices = slicesLeft.slice(maxNumberOfSlices);
 
     if (overflowSlices.length > 0) {
       overflowSlices.forEach(function(d) {
         otherItems.push(d);
         return otherSlice.percent += d.percent;
       });
-      slicesLeft = take(slicesLeft, maxNumberOfSlices);
+      slicesLeft = slicesLeft.slice(0, maxNumberOfSlices);
     }
 
     // Only push other slice if there is more than one other item
@@ -233,7 +234,7 @@ const PieChartComponent = ChartComponent.extend(FloatingTooltipMixin,
     value = 0;
     otherItems = this.get('otherData');
     if (otherItems != null) {
-      each(otherItems, function(item) {
+      Array.prototype.forEach.call(otherItems, function(item) {
         return value += item.value;
       });
     }
@@ -404,11 +405,11 @@ const PieChartComponent = ChartComponent.extend(FloatingTooltipMixin,
       }
       formatLabelFunction = this.get('formatLabelFunction');
 
-      content = $('<span>');
-      content.append($('<span class="tip-label">').text(data.label));
-      content.append($('<span class="name">').text(this.get('tooltipValueDisplayName') + ': '));
-      content.append($('<span class="value">').text(formatLabelFunction(value)));
-      return this.showTooltip(content.html(), d3.event);
+      var content = createSpan();
+      content.appendChild(createSpan(data.label, ['tip-label']));
+      content.appendChild(createSpan(this.get('tooltipValueDisplayName') + ': ', ['name']));
+      content.appendChild(createSpan(formatLabelFunction(data.value), ['value']));
+      return this.showTooltip(content.outerHTML, d3.event);
     };
   }),
 
@@ -453,13 +454,13 @@ const PieChartComponent = ChartComponent.extend(FloatingTooltipMixin,
     });
   }),
 
-  groupAttrs: Ember.computed(function() {
+  get groupAttrs() {
     return {
       'class': function(d) {
         return d.data._otherItems ? 'arc other-slice' : 'arc';
       }
     };
-  }),
+  },
 
   sliceAttrs: Ember.computed('arc', 'getSliceColor', function() {
     return {
@@ -570,10 +571,10 @@ const PieChartComponent = ChartComponent.extend(FloatingTooltipMixin,
     return this.get('viewport').selectAll('.arc');
   },
 
-  groups: Ember.computed(function() {
+  get groups() {
     var data = this.get('pie')(this.get('finishedData'));
     return this.getViewportArc().data(data);
-  }).volatile(),
+  },
 
   // ----------------------------------------------------------------------------
   // Drawing Functions

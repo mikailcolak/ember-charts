@@ -12,6 +12,7 @@ import AxisTitlesMixin from '../mixins/axis-titles';
 
 import { groupBy } from '../utils/group-by';
 import LabelTrimmer from '../utils/label-trimmer';
+import { createSpan, createBr } from '../utils';
 
 const VerticalBarChartComponent = ChartComponent.extend(LegendMixin,
   FloatingTooltipMixin, AxesMixin, FormattableMixin, SortableChartMixin,
@@ -516,16 +517,14 @@ const VerticalBarChartComponent = ChartComponent.extend(LegendMixin,
       d3.select(element).classed('hovered', true);
 
       // Show tooltip
-      var tipLabel = (data.group) ? $("<span class=\"tip-label\" />").text(data.group): '';
-      var content =  $("<span />").append(tipLabel);
+      var tipLabel = (data.group) ? createSpan(data.group, ['tip-label']): '';
+      var content =  createSpan(null, null, [tipLabel]);
 
       var formatLabel = this.get('formatLabelFunction');
       var addValueLine = function(d) {
-        var label = $("<span class=\"name\" />").text(d.label + ": ");
-        content.append(label);
-        var value = $("<span class=\"value\">").text(formatLabel(d.value));
-        content.append(value);
-        content.append('<br />');
+        content.appendChild(createSpan(`${d.label}: `, ['name']));
+        content.append(createSpan(formatLabel(d.value), ['value']));
+        content.append(createBr());
       };
 
       if (isGroup) {
@@ -535,7 +534,7 @@ const VerticalBarChartComponent = ChartComponent.extend(LegendMixin,
         // Just hovering over single bar
         addValueLine(data);
       }
-      return this.showTooltip(content.html(), d3.event);
+      return this.showTooltip(content.outerHTML, d3.event);
     };
   }),
 
@@ -647,11 +646,11 @@ const VerticalBarChartComponent = ChartComponent.extend(LegendMixin,
     return this.get('viewport').selectAll('.bars');
   },
 
-  groups: Ember.computed(function() {
+  get groups() {
     return this.getViewportBars().data(this.get('finishedData'));
-  }).volatile(),
+  },
 
-  yAxis: Ember.computed(function() {
+  get yAxis() {
     var yAxis = this.get('viewport').select('.y.axis');
     if (yAxis.empty()) {
       return this.get('viewport')
@@ -660,7 +659,7 @@ const VerticalBarChartComponent = ChartComponent.extend(LegendMixin,
     } else {
       return yAxis;
     }
-  }).volatile(),
+  },
 
   // ----------------------------------------------------------------------------
   // Label Layout

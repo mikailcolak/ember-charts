@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(environment) {
+module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'dummy',
     environment,
@@ -13,8 +13,8 @@ module.exports = function(environment) {
       },
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
+        Date: false,
+      },
     },
 
     APP: {
@@ -33,6 +33,7 @@ module.exports = function(environment) {
   };
 
   if (environment === 'development') {
+    // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
@@ -40,21 +41,19 @@ module.exports = function(environment) {
   }
 
   if (environment === 'test') {
-    ENV.APP.autoboot = false;
     // Testem prefers this...
-    ENV.baseURL = '/';
     ENV.locationType = 'none';
-    // here you can enable a production-specific feature
+
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.autoboot = false;
   }
 
   if (environment === 'production') {
-    ENV.rootURL = 'ember-charts';
-    ENV.locationType = 'hash';
+    // here you can enable a production-specific feature
   }
 
   return ENV;

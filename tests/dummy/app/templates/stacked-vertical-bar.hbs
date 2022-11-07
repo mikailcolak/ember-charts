@@ -5,23 +5,23 @@
 
   <div class="example-container">
     <div class="chart-container">
-      {{stacked-vertical-bar-chart
-        maxBarThickness=maxBarThickness
-        selectedSeedColor=selectedSeedColor
-        data=data
-        maxLabelHeight=maxLabelHeight
-        betweenBarPadding=betweenBarPadding
-        hasXAxisTitle=hasXAxisTitle
-        hasYAxisTitle=hasYAxisTitle
-        xValueDisplayName=xValueDisplayName
-        yValueDisplayName=yValueDisplayName
-        xTitleHorizontalOffset=xTitleHorizontalOffset
-        yTitleVerticalOffset=yTitleVerticalOffset
-        strokeWidth=strokeWidth
-        barSortKey=barSortKey
-        barSortAscending=barSortAscending
-        sliceSortKey=sliceSortKey
-      }}
+      <StackedVerticalBarChart
+        @maxBarThickness={{this.maxBarThickness}}
+        @selectedSeedColor={{this.selectedSeedColor}}
+        @data={{this.data}}
+        @maxLabelHeight={{this.maxLabelHeight}}
+        @betweenBarPadding={{this.betweenBarPadding}}
+        @hasXAxisTitle={{this.hasXAxisTitle}}
+        @hasYAxisTitle={{this.hasYAxisTitle}}
+        @xValueDisplayName={{this.xValueDisplayName}}
+        @yValueDisplayName={{this.yValueDisplayName}}
+        @xTitleHorizontalOffset={{this.xTitleHorizontalOffset}}
+        @yTitleVerticalOffset={{this.yTitleVerticalOffset}}
+        @strokeWidth={{this.strokeWidth}}
+        @barSortKey={{this.barSortKey}}
+        @barSortAscending={{this.barSortAscending}}
+        @sliceSortKey={{this.sliceSortKey}}
+      />
     </div>
   </div>
 
@@ -33,51 +33,48 @@
         <div class="form-group" data-test="data">
           <label class="col-lg-4 control-label">Data</label>
           <div class="col-lg-8">
-            {{view "select"
-              content=availableDataSets
-              value=selectedData
-              class="form-control"
-            }}
+            <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedData)))}}>
+              {{#each this.availableDataSets as |dataset|}}
+              <option value={{dataset}} selected={{eq dataset this.selectedData}}>{{dataset}}</option>
+              {{/each}}
+            </select>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label" data-test="color">Color</label>
           <div class="col-lg-8">
-            {{view "select"
-              content=seedColorNames
-              value=selectedSeedColorName
-              class="form-control"
-            }}
+            <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedSeedColorName)))}}>
+              {{#each this.seedColorNames as |dataset|}}
+              <option value={{dataset}} selected={{eq dataset this.selectedSeedColorName}}>{{dataset}}</option>
+              {{/each}}
+            </select>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label" data-test="bar-sorting">Slice Sort Key</label>
           <div class="col-lg-8">
-            {{view "select"
-            content=sliceSortKeys
-            value=selectedSliceSortKey
-            class="form-control"
-          }}
+            <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedSliceSortKey)))}}>
+            {{#each this.sliceSortKeys as |dataset|}}
+            <option value={{dataset}} selected={{eq dataset this.selectedSliceSortKey}}>{{dataset}}</option>
+            {{/each}}
+          </select>
         </div>
       </div>
         <div class="form-group">
           <label class="col-lg-4 control-label" data-test="bar-sorting">Bar Sort Key</label>
           <div class="col-lg-8">
-            {{view "select"
-              content=barSortKeys
-              value=selectedBarSortKey
-              class="form-control"
-            }}
+            <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedBarSortKey)))}}>
+              {{#each this.barSortKeys as |dataset|}}
+              <option value={{dataset}} selected={{eq dataset this.selectedBarSortKey}}>{{dataset}}</option>
+              {{/each}}
+            </select>
           </div>
         </div>
         <div class="form-group">
           <div class="col-lg-offset-4 col-lg-8">
             <div class="checkbox">
               <label>
-                {{input
-                  type="checkbox"
-                  checked=barSortAscending
-                }}
+                <Input @type="checkbox" @checked={{this.barSortAscending}} />
                 Sort Bars Ascending
               </label>
             </div>
@@ -86,33 +83,41 @@
         <div class="form-group">
           <label class="col-lg-4 control-label">Rotated Label Height</label>
           <div class="col-lg-8">
-            {{scrubber-component min="20" max="100" value=maxLabelHeight}}
-            <span class="help-block">Max Label Height: {{maxLabelHeight}}</span>
+            <ScrubberComponent @min="20" @max="100" @value={{this.maxLabelHeight}} />
+            <span class="help-block">Max Label Height: {{this.maxLabelHeight}}</span>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Between Bar Padding</label>
           <div class="col-lg-8">
-            {{scrubber-component min="0" max="1" step="0.05" value=betweenBarPadding}}
-            <span class="help-block">Between Bar Padding: {{betweenBarPadding}}</span>
+            <ScrubberComponent @min="0" @max="1" @step="0.05" @value={{this.betweenBarPadding}} />
+            <span class="help-block">Between Bar Padding: {{this.betweenBarPadding}}</span>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Slice Outline Thickness</label>
           <div class="col-lg-8">
-            {{scrubber-component min="0" max="5" step="0.1" value=strokeWidth}}
-            <span class="help-block">Slice Outline Thickness: {{strokeWidth}}</span>
+            <ScrubberComponent @min="0" @max="5" @step="0.1" @value={{this.strokeWidth}} />
+            <span class="help-block">Slice Outline Thickness: {{this.strokeWidth}}</span>
           </div>
         </div>
 
-        {{partial "axis-title-config"}}
+        <AxisTitleConfig
+          @hasXAxisTitle={{this.hasXAxisTitle}}
+          @hasYAxisTitle={{this.hasYAxisTitle}}
+          @xValueDisplayName={{this.xValueDisplayName}}
+          @xTitleHorizontalOffset={{this.xTitleHorizontalOffset}}
+          @yValueDisplayName={{this.yValueDisplayName}}
+          @yTitleVerticalOffset={{this.yTitleVerticalOffset}}
+        />
+
       </div>
     </div>
 
     <div class="col-md-6">
       <h4>JSON Data</h4>
       <div class="chart-json">
-        <pre>{{prettyPrintedData}}</pre>
+        <pre>{{this.prettyPrintedData}}</pre>
       </div>
     </div>
   </div>

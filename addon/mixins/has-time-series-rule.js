@@ -100,7 +100,7 @@ export default Ember.Mixin.create({
     var _this = this;
     this._super();
 
-    d3.select(this.$('svg')[0]).on('mousemove', function() {
+    d3.select(this.element.querySelector('svg')).on('mousemove', function() {
       if (!_this.get('isInteractive')) {
         return;
       }

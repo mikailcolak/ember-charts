@@ -1,4 +1,5 @@
 import Ember from 'ember';
+
 export default Ember.Mixin.create({
 
   // # ----------------------------------------------------------------------------
@@ -12,24 +13,24 @@ export default Ember.Mixin.create({
 
   showTooltip: function(content, event) {
     var $ttid = this._getTooltip();
-    $ttid.html(content);
-    $ttid.show();
+    $ttid.innerHTML = content;
+    $ttid.classList.remove('hidden');
     return this._updateTooltipPosition(event);
   },
 
   hideTooltip: function() {
-    return this._getTooltip().hide();
+    return this._getTooltip().classList.add('hidden');
   },
 
   // # ----------------------------------------------------------------------------
   // # Private Methods
   // # ----------------------------------------------------------------------------
-  _tooltipId: Ember.computed(function() {
+  get _tooltipId() {
     return this.get('elementId') + '_tooltip';
-  }),
+  },
 
   _getTooltip: function() {
-    return $("#" + this.get('_tooltipId'));
+    return document.querySelector("#" + this.get('_tooltipId'));
   },
 
   _updateTooltipPosition: function(event) {
@@ -39,19 +40,19 @@ export default Ember.Mixin.create({
     var yOffset = 10;
 
     // # Get tooltip width/height
-    var width = $tooltip.width();
-    var height = $tooltip.height();
+    var width = $tooltip.clientWidth;
+    var height = $tooltip.clientHeight;
 
     // # Get top/left coordinates of scrolled window
-    var windowScrollTop = $(window).scrollTop();
-    var windowScrollLeft = $(window).scrollLeft();
+    var windowScrollTop = 0;
+    var windowScrollLeft = 0;
 
     // # Get current X,Y position of cursor even if window is scrolled
     var curX = event.clientX + windowScrollLeft;
     var curY = event.clientY + windowScrollTop;
 
     var tooltipLeftOffset;
-    if ((curX - windowScrollLeft + xOffset * 2 + width) > $(window).width()) {
+    if ((curX - windowScrollLeft + xOffset * 2 + width) > window.innerWidth) {
       // # Not enough room to put tooltip to the right of the cursor
       tooltipLeftOffset = -(width + xOffset * 2);
     } else {
@@ -62,7 +63,7 @@ export default Ember.Mixin.create({
     var tooltipLeft = curX + tooltipLeftOffset;
 
     var tooltipTopOffset;
-    if ((curY - windowScrollTop + yOffset * 2 + height) > $(window).height()) {
+    if ((curY - windowScrollTop + yOffset * 2 + height) > window.innerHeight) {
       // # Not enough room to put tooltip to the below the cursor
       tooltipTopOffset = -(height + yOffset * 2);
     } else {
@@ -83,7 +84,9 @@ export default Ember.Mixin.create({
     }
 
     // # Place tooltip
-    return $tooltip.css('top', tooltipTop + 'px').css('left', tooltipLeft + 'px');
+    $tooltip.style.top = `${tooltipTop}px`;
+    $tooltip.style.left = `${tooltipLeft}px`;
+    return $tooltip;
   },
 
   // # ----------------------------------------------------------------------------
@@ -92,12 +95,15 @@ export default Ember.Mixin.create({
 
   didInsertElement: function() {
     this._super();
-    $("body").append("<div class='chart-float-tooltip' id='" + this.get('_tooltipId') + "'></div>");
+    const tooltip = document.createElement('div');
+    tooltip.setAttribute('id', this.get('_tooltipId'));
+    tooltip.classList.add('chart-float-tooltip');
+    this.element.appendChild(tooltip);
     return this.hideTooltip();
   },
 
   willDestroyElement: function() {
     this._super();
-    return this._getTooltip().remove();
+    return this.element.removeChild(this._getTooltip());
   }
 });

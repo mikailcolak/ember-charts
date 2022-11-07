@@ -2,6 +2,7 @@ import Ember from 'ember';
 import * as d3 from 'd3';
 import { isFunction, sortBy } from 'lodash-es';
 import LabelTrimmer from '../utils/label-trimmer';
+import { createSpan } from '../utils';
 
 // Calculates maximum width of label in a row, before it gets truncated by label trimmer.
 // If labelWidth < average width per label (totalAvailableWidthForLabels/label count), then do not truncate
@@ -275,23 +276,23 @@ export default Ember.Mixin.create({
         _this.get('viewport').selectAll(data.selector).classed('hovered', true);
       }
 
-      var content = $("<span />");
-      content.append($("<span class=\"tip-label\">").text(data.label));
+      var content = createSpan();
+      content.appendChild(createSpan(data.label, ['tip-label']));
       if (!Ember.isNone(data.xValue)) {
         var formatXValue = _this.get('formatXValue');
-        content.append($('<span class="name" />').text(_this.get('tooltipXValueDisplayName') + ': '));
-        content.append($('<span class="value" />').text(formatXValue(data.xValue)));
+        content.appendChild(createSpan(_this.get('tooltipXValueDisplayName') + ': ', ['name']));
+        content.appendChild(createSpan(formatXValue(data.xValue), ['value']));
         if (!Ember.isNone(data.yValue)) {
           content.append('<br />');
         }
       }
       if (!Ember.isNone(data.yValue)) {
         var formatYValue = _this.get('formatYValue');
-        content.append($('<span class="name" />').text(_this.get('tooltipYValueDisplayName') + ': '));
-        content.append($('<span class="value" />').text(formatYValue(data.yValue)));
+        content.appendChild(createSpan(_this.get('tooltipYValueDisplayName') + ': ', ['name']));
+        content.appendChild(createSpan(formatYValue(data.yValue), ['value']));
       }
 
-      _this.showTooltip(content.html(), d3.event);
+      _this.showTooltip(content.outerHTML, d3.event);
     };
   }),
 
@@ -320,14 +321,14 @@ export default Ember.Mixin.create({
       .remove();
   },
 
-  legend: Ember.computed(function() {
+  get legend() {
     var legend = this.get('viewport').select('.legend-container');
     if (legend.empty()) {
       return this.get('viewport').append('g').attr('class', 'legend-container');
     } else {
       return legend;
     }
-  }).volatile(),
+  },
 
   // Create a list of all the legend Items, icon for each legend item and corresponding labels
   // Calculate the number of legend item rows and items in each. Each time width should be bounded by min and max legend item width.

@@ -75,7 +75,7 @@ export default SlideController.extend({
     return this.get('barDataHash')[this.get('selectedBarData')];
   }),
 
-  lineDataHash: Ember.computed(function() {
+  get lineDataHash() {
     return {
       monthly_return_single_series: monthly_return_single_series,
       monthly_return_double_series: monthly_return_double_series,
@@ -107,7 +107,7 @@ export default SlideController.extend({
 
       empty: data.empty
     };
-  }),
+  },
 
   barDataHash: Ember.computed.alias('lineDataHash'),
   selectedLineData: 'daily_two_series',

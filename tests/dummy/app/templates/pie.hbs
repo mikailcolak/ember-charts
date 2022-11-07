@@ -5,17 +5,17 @@
 
   <div class="example-container">
     <div class="chart-container">
-      {{pie-chart
-        maxRadius=maxRadius
-        maxSlicePercent=maxSlicePercent
-        minSlicePercent=minSlicePercent
-        maxNumberOfSlices=maxNumberOfSlices
-        selectedSeedColor=selectedSeedColor
-        data=data
-        labelWidthMultiplier=labelWidthMultiplier
-        maxDecimalPlace=maxDecimalPlace
-        includeRoundedZeroPercentSlices=includeRoundedZeroPercentSlices
-      }}
+      <PieChart
+        @maxRadius={{this.maxRadius}}
+        @maxSlicePercent={{this.maxSlicePercent}}
+        @minSlicePercent={{this.minSlicePercent}}
+        @maxNumberOfSlices={{this.maxNumberOfSlices}}
+        @selectedSeedColor={{this.selectedSeedColor}}
+        @data={{this.data}}
+        @labelWidthMultiplier={{this.labelWidthMultiplier}}
+        @maxDecimalPlace={{this.maxDecimalPlace}}
+        @includeRoundedZeroPercentSlices={{this.includeRoundedZeroPercentSlices}}
+      />
     </div>
   </div>
 
@@ -27,66 +27,63 @@
         <div class="form-group">
           <label class="col-lg-4 control-label">Data</label>
           <div class="col-lg-8" data-test="data">
-            {{view "select"
-             content=availableDataSets
-             value=selectedData
-             class="chart-data form-control"
-            }}
+            <select class="ember-select chart-data form-control" {{on 'change' (pick 'target.value' (fn (mut this.selectedData)))}}>
+              {{#each this.availableDataSets as |dataset|}}
+              <option value={{dataset}} selected={{eq dataset this.selectedData}}>{{dataset}}</option>
+              {{/each}}
+            </select>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Color</label>
           <div class="col-lg-8">
-            {{view "select"
-             content=seedColorNames
-             value=selectedSeedColorName
-             class="form-control"
-            }}
+            <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedSeedColorName)))}}>
+             {{#each this.seedColorNames as |dataset|}}
+             <option value={{dataset}} selected={{eq dataset this.selectedSeedColorName}}>{{dataset}}</option>
+             {{/each}}
+            </select>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Max Radius</label>
           <div class="col-lg-8">
-            {{scrubber-component min="40" max="300" step="10" value=maxRadius}}
-            <span class="help-block">Max Radius: {{maxRadius}}</span>
+            <ScrubberComponent @min="40" @max="300" @step="10" @value={{this.maxRadius}} />
+            <span class="help-block">Max Radius: {{this.maxRadius}}</span>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Max Number of Slices</label>
           <div class="col-lg-8">
-            {{scrubber-component min="1" max="30" step="1" value=maxNumberOfSlices}}
-            <span class="help-block">Max Number of Slices: {{maxNumberOfSlices}}</span>
+            <ScrubberComponent @min="1" @max="30" @step="1" @value={{this.maxNumberOfSlices}} />
+            <span class="help-block">Max Number of Slices: {{this.maxNumberOfSlices}}</span>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Min Slice Percent</label>
           <div class="col-lg-8">
-            {{scrubber-component min="0" max="20" step="1" value=minSlicePercent}}
-            <span class="help-block">Min Slice Percent: {{minSlicePercent}}</span>
+            <ScrubberComponent @min="0" @max="20" @step="1" @value={{this.minSlicePercent}} />
+            <span class="help-block">Min Slice Percent: {{this.minSlicePercent}}</span>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Label Width Multipler</label>
           <div class="col-lg-8">
-            {{scrubber-component min="0" max="0.45" step="0.05" value=labelWidthMultiplier}}
-            <span class="help-block">Label Width Multiplier: {{labelWidthMultiplier}}</span>
+            <ScrubberComponent @min="0" @max="0.45" @step="0.05" @value={{this.labelWidthMultiplier}} />
+            <span class="help-block">Label Width Multiplier: {{this.labelWidthMultiplier}}</span>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Maximum Decimal Place</label>
           <div class="col-lg-8">
-            {{scrubber-component min="0" max="8" step="1" value=maxDecimalPlace}}
-            <span class="help-block">Maximum Decimal Place: {{maxDecimalPlace}}</span>
+            <ScrubberComponent @min="0" @max="8" @step="1" @value={{this.maxDecimalPlace}} />
+            <span class="help-block">Maximum Decimal Place: {{this.maxDecimalPlace}}</span>
           </div>
         </div>
         <div class="form-group">
           <div class="col-lg-offset-4 col-lg-8">
             <div class="checkbox">
               <label>
-                {{input
-                  type="checkbox"
-                  checked=includeRoundedZeroPercentSlices
-                }}
+                <Input @type="checkbox" @checked={{this.includeRoundedZeroPercentSlices}} />
                 Include Rounded Zero Percent Slices
               </label>
             </div>
@@ -98,7 +95,7 @@
     <div class="col-md-6">
       <h4>JSON Data</h4>
       <div class="chart-json">
-<pre>{{prettyPrintedData}}</pre>
+<pre>{{this.prettyPrintedData}}</pre>
       </div>
     </div>
   </div>

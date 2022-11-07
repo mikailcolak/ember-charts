@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Addepar | Ember Charts</title>
+    <title>Dummy Tests</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,17 +14,19 @@
     <link rel="stylesheet" href="{{rootURL}}assets/dummy.css">
     <link rel="stylesheet" href="{{rootURL}}assets/test-support.css">
 
-    <link rel="shortcut icon" href="img/favicon.ico">
-
-    <!-- Load Fonts from Fonts.com -->
-    <link type="text/css" rel="stylesheet" href="https://fast.fonts.net/cssapi/cc61a2f8-3c32-45ef-9be7-fc0cc1fab22b.css"/>
-
     {{content-for "head-footer"}}
     {{content-for "test-head-footer"}}
   </head>
   <body>
     {{content-for "body"}}
     {{content-for "test-body"}}
+
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+      <div id="ember-testing-container">
+        <div id="ember-testing"></div>
+      </div>
+    </div>
 
     <script src="/testem.js" integrity=""></script>
     <script src="{{rootURL}}assets/vendor.js"></script>

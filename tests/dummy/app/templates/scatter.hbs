@@ -5,19 +5,19 @@
 
   <div class="example-container">
     <div class="chart-container">
-      {{scatter-chart
-        dotRadius=dotRadius
-        data=data
-        isShowingTotal=isShowingTotal
-        totalPointData=totalPointData
-        selectedSeedColor=selectedSeedColor
-        xValueDisplayName=xValueDisplayName
-        yValueDisplayName=yValueDisplayName
-        hasXAxisTitle=hasXAxisTitle
-        hasYAxisTitle=hasYAxisTitle
-        xTitleHorizontalOffset=xTitleHorizontalOffset
-        yTitleVerticalOffset=yTitleVerticalOffset
-      }}
+      <ScatterChart
+        @dotRadius={{this.dotRadius}}
+        @data={{this.data}}
+        @isShowingTotal={{this.isShowingTotal}}
+        @totalPointData={{this.totalPointData}}
+        @selectedSeedColor={{this.selectedSeedColor}}
+        @xValueDisplayName={{this.xValueDisplayName}}
+        @yValueDisplayName={{this.yValueDisplayName}}
+        @hasXAxisTitle={{this.hasXAxisTitle}}
+        @hasYAxisTitle={{this.hasYAxisTitle}}
+        @xTitleHorizontalOffset={{this.xTitleHorizontalOffset}}
+        @yTitleVerticalOffset={{this.yTitleVerticalOffset}}
+      />
     </div>
   </div>
 
@@ -29,39 +29,45 @@
         <div class="form-group">
           <label class="col-lg-4 control-label">Data</label>
           <div class="col-lg-8">
-            {{view "select"
-             content=availableDataSets
-             value=selectedData
-             class="form-control"
-            }}
+            <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedData)))}}>
+             {{#each this.availableDataSets as |dataset|}}
+             <option value={{dataset}} selected={{eq dataset this.selectedData}}>{{dataset}}</option>
+             {{/each}}
+            </select>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Color</label>
           <div class="col-lg-8">
-            {{view "select"
-              content=seedColorNames
-              value=selectedSeedColorName
-              class="form-control"
-            }}
+            <select class="ember-select" {{on 'change' (pick 'target.value' (fn (mut this.selectedSeedColorName)))}}>
+              {{#each this.seedColorNames as |dataset|}}
+              <option value={{dataset}} selected={{eq dataset this.selectedSeedColorName}}>{{dataset}}</option>
+              {{/each}}
+            </select>
           </div>
         </div>
         <div class="form-group">
           <label class="col-lg-4 control-label">Dot Radius</label>
           <div class="col-lg-8">
-           {{scrubber-component min="2" max="20" step="1" value=dotRadius}}
-            <span class="help-block">Dot Radius: {{dotRadius}}</span>
+           <ScrubberComponent @min="2" @max="20" @step="1" @value={{this.dotRadius}} />
+            <span class="help-block">Dot Radius: {{this.dotRadius}}</span>
           </div>
         </div>
 
-        {{partial "axis-title-config"}}
+        <AxisTitleConfig
+          @hasXAxisTitle={{this.hasXAxisTitle}}
+          @hasYAxisTitle={{this.hasYAxisTitle}}
+          @xValueDisplayName={{this.xValueDisplayName}}
+          @xTitleHorizontalOffset={{this.xTitleHorizontalOffset}}
+          @yValueDisplayName={{this.yValueDisplayName}}
+          @yTitleVerticalOffset={{this.yTitleVerticalOffset}}
+        />
+
         <div class="form-group">
           <div class="col-lg-offset-4 col-lg-8">
             <div class="checkbox">
               <label>
-                {{input
-                  type="checkbox"
-                  checked=isShowingTotal }}
+                <Input @type="checkbox" @checked={{this.isShowingTotal}} />
                 Show Portfolio Total
               </label>
             </div>
@@ -73,7 +79,7 @@
     <div class="col-md-6">
       <h4>JSON Data</h4>
       <div class="chart-json">
-        <pre>{{prettyPrintedData}}</pre>
+        <pre>{{this.prettyPrintedData}}</pre>
       </div>
     </div>
   </div>

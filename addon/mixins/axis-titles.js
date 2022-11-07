@@ -146,17 +146,17 @@ const AxisTitlesMixin = Ember.Mixin.create({
    * References and/or creates the d3 element for x axis title
    * @type {Object}
    */
-  xAxisTitle: Ember.computed(function() {
+  get xAxisTitle() {
     return this.selectOrCreateAxisTitle('.x.axis-title').attr('class', 'x axis-title');
-  }).volatile(),
+  },
 
   /**
    * References and/or creates the d3 element for y axis title
    * @type {Object}
    */
-  yAxisTitle: Ember.computed(function() {
+  get yAxisTitle() {
     return this.selectOrCreateAxisTitle('.y.axis-title').attr('class', 'y axis-title');
-  }).volatile(),
+  },
 
   /**
    * Position of x axis title on the x axis

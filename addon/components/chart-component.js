@@ -1,8 +1,9 @@
 import Ember from 'ember';
 import * as d3 from 'd3';
-import { uniq } from 'lodash-es';
+import { uniq } from '../utils';
 import ResizeHandlerMixin from '../mixins/resize-handler';
 import ColorableMixin from '../mixins/colorable';
+import { addObserver, removeObserver } from '@ember/object/observers';
 
 const ChartComponent = Ember.Component.extend(ColorableMixin, ResizeHandlerMixin, {
   layoutName: 'components/chart-component',
@@ -142,13 +143,13 @@ const ChartComponent = Ember.Component.extend(ColorableMixin, ResizeHandlerMixin
   // 1 Outside most element is div.chart-frame
   // 2 Next element is svg
   // 3 Finally, g.chart-viewport
-  $viewport: Ember.computed(function() {
-    return this.$('.chart-viewport')[0];
-  }),
+  get $viewport() {
+    return this.element.querySelector('.chart-viewport');
+  },
 
-  viewport: Ember.computed(function() {
+  get viewport() {
     return d3.select(this.get('$viewport'));
-  }),
+  },
 
   // Transform the view commonly displaced by the margin
   transformViewport: Ember.computed('marginLeft', 'marginTop', function() {
@@ -226,29 +227,32 @@ const ChartComponent = Ember.Component.extend(ColorableMixin, ResizeHandlerMixin
   init: function() {
     this._super();
     this._scheduledDrawCount = 0;
+    const self = this;
     uniq(this.get('renderVars')).forEach((renderVar) => {
-      this.addObserver(renderVar, this.drawOnce);
+      addObserver(this, renderVar, self.drawOnce);
       // This is just to ensure that observers added above fire even
       // if that renderVar is not consumed elsewhere.
-      this.get(renderVar);
+      self.get(renderVar);
     });
   },
 
   willDestroyElement: function() {
+    const self = this;
     uniq(this.get('renderVars')).forEach((renderVar) => {
-      this.removeObserver(renderVar, this, this.drawOnce);
+      removeObserver(this, renderVar, self.drawOnce);
     });
     this._super();
   },
 
   didInsertElement: function() {
     this._super();
+    const self = this;
     Ember.run.scheduleOnce('afterRender', this, function() {
-      if (this.isDestroying || !this.element) {
+      if (self.isDestroying || !self.element) {
         return;
       }
-      this._updateDimensions();
-      this.drawOnce();
+      self._updateDimensions();
+      self.drawOnce();
     });
   },
 
@@ -263,12 +267,13 @@ const ChartComponent = Ember.Component.extend(ColorableMixin, ResizeHandlerMixin
 
   // Wrap the chart in a container div that is the same size
   _updateDimensions: function() {
-    this.set('defaultOuterHeight', this.$().height());
-    this.set('defaultOuterWidth', this.$().width());
+    this.set('defaultOuterHeight', this.element.clientHeight);
+    this.set('defaultOuterWidth', this.element.clientWidth);
   },
 
   clearChart: function() {
-    this.$('.chart-viewport').children().remove();
+    const chartViewport = this.element.querySelector('.chart-viewport');
+    this.element.querySelectorAll('.chart-viewport > *').forEach(c => chartViewport.removeChild(c));
   },
 
   getHasScheduledDraw() {

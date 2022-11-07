@@ -5,25 +5,25 @@
       <div class="col-md-3">
         <ul class="list-unstyled">
           <li><h6>Ember Charts</h6></li>
-          <li>{{#link-to 'overview'}}Overview &amp; Getting Started{{/link-to}}</li>
-          <li>{{#link-to 'documentation'}}API &amp; Documentation{{/link-to}}</li>
+          <li><LinkTo @route="overview">Overview &amp; Getting Started</LinkTo></li>
+          <li><LinkTo @route="documentation">API &amp; Documentation</LinkTo></li>
         </ul>
       </div>
       <div class="col-md-3">
         <ul class="list-unstyled">
           <li><h6>Chart Types</h6></li>
-          <li>{{#link-to 'horizontal-bar'}}Horizontal Bar Chart{{/link-to}}</li>
-          <li>{{#link-to 'vertical-bar'}}Vertical Bar Chart{{/link-to}}</li>
-          <li>{{#link-to 'pie'}}Pie Chart{{/link-to}}</li>
-          <li>{{#link-to 'scatter'}}Scatter Plot{{/link-to}}</li>
-          <li>{{#link-to 'time-series'}}Time Series{{/link-to}}</li>
+          <li><LinkTo @route="horizontal-bar">Horizontal Bar Chart</LinkTo></li>
+          <li><LinkTo @route="vertical-bar">Vertical Bar Chart</LinkTo></li>
+          <li><LinkTo @route="pie">Pie Chart</LinkTo></li>
+          <li><LinkTo @route="scatter">Scatter Plot</LinkTo></li>
+          <li><LinkTo @route="time-series">Time Series</LinkTo></li>
         </ul>
       </div>
       <div class="col-md-3">
         <ul class="list-unstyled">
           <li><h6>Addepar Open Source</h6></li>
           <li><a href="https://opensource.addepar.com/">Home</a></li>
-          <li>{{#link-to 'license'}}License{{/link-to}}</li>
+          <li><LinkTo @route="license">License</LinkTo></li>
         </ul>
       </div>
       <div class="col-md-3">

@@ -1,5 +1,3 @@
-.stage/
-gh_pages/
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
@@ -14,6 +12,7 @@ gh_pages/
 /.env*
 /.pnp*
 /.sass-cache
+/.eslintcache
 /connect.lock
 /coverage/
 /libpeerconnection.log

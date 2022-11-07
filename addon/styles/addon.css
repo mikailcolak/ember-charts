@@ -144,7 +144,7 @@
   fill: none !important;
 }
 .chart-float-tooltip {
-  position: absolute;
+  position: fixed;
   top: 50px;
   left: 50px;
   background: #555;
