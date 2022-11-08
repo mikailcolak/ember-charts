@@ -517,7 +517,7 @@ const VerticalBarChartComponent = ChartComponent.extend(LegendMixin,
       d3.select(element).classed('hovered', true);
 
       // Show tooltip
-      var tipLabel = (data.group) ? createSpan(data.group, ['tip-label']): '';
+      var tipLabel = createSpan(data?.group ?? null, ['tip-label']);
       var content =  createSpan(null, null, [tipLabel]);
 
       var formatLabel = this.get('formatLabelFunction');
